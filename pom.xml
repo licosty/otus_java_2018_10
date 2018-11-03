@@ -83,6 +83,9 @@
                         <option>-keep public class ru.otus.l011.Main{public static void main(java.lang.String[]);}</option>
                         <option>-dontwarn</option>
                     </options>
+                    <libs>
+                        <lib>${java.home}/lib/rt.jar</lib>
+                    </libs>
                 </configuration>
             </plugin>
         </plugins>
