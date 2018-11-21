@@ -1,76 +1,19 @@
 package ru.otus.l021;
 
-import java.lang.management.ManagementFactory;
-
 public class Main {
-    public static void main(String... args) throws InterruptedException {
-        System.out.println("pid: " + ManagementFactory.getRuntimeMXBean().getName());
+    public static void main(String... args) {
 
-        long startMem = getMem();
-        System.out.println("Start memory: " + startMem);
+        System.out.println(String.format("byte size: %s bytes\n", Measurer.measureByte()));
+        System.out.println(String.format("short size: %s bytes\n", Measurer.measureShort()));
+        System.out.println(String.format("int size: %s bytes\n", Measurer.measureInt()));
+        System.out.println(String.format("long size: %s bytes\n", Measurer.measureLong()));
 
-        String emptyString = new String(new char[0]);
-        long afterStringMem = getMem();
-        System.out.println("Empty String size: " + (afterStringMem - startMem));
-        System.out.println("----------");
+        System.out.println(String.format("float size: %s bytes\n", Measurer.measureFloat()));
+        System.out.println(String.format("double size: %s bytes\n", Measurer.measureDouble()));
 
-        int size = 20_000_000;
+        System.out.println(String.format("Element size: %s bytes\n", Measurer.measure(() -> new MyClass())));
+        System.out.println(String.format("Empty string size: %s bytes", Measurer.measure(() -> new String(new char[0]))));
 
-        // Create an array of objects
-        Object[] array = new Object[size];
-
-        long arrayMem1 = getMem();
-        System.out.println("Ref size: " + (arrayMem1 - startMem) / array.length);
-
-        for (int i = 0; i < array.length; i++) {
-            array[i] = i;
-        }
-
-        long arrayMem2 = getMem();
-        System.out.println("Object size: " + (arrayMem2 - arrayMem1) / array.length);
-        System.out.println("----------");
-
-        // Create an array of integers
-        Integer[] arrayInt = new Integer[size];
-
-        long arrayIntMem1 = getMem();
-        System.out.println("Ref size: " + (arrayIntMem1 - arrayMem2) / arrayInt.length);
-
-        for (int i = 0; i < arrayInt.length; i++) {
-            arrayInt[i] = i;
-        }
-
-        long arrayIntMem2 = getMem();
-        System.out.println("Integer size: " + (arrayIntMem2 - arrayIntMem1) / arrayInt.length);
-        System.out.println("----------");
-
-        // Create an array of objects of MyClass
-        MyClass[] arrayMyClass = new MyClass[size];
-
-        long arrayMyClassMem1 = getMem();
-        System.out.println("Ref size: " + (arrayMyClassMem1 - arrayIntMem2) / arrayMyClass.length);
-
-        for (int i = 0; i < arrayMyClass.length; i++) {
-            arrayMyClass[i] = new MyClass();
-        }
-
-        long arrayMyClassMem2 = getMem();
-        System.out.println("MyClass size: " + (arrayMyClassMem2 - arrayMyClassMem1) / arrayMyClass.length);
-        System.out.println("----------");
-
-        array = null;
-        arrayInt = null;
-        arrayMyClass = null;
-        System.out.println("Array is ready for GC");
-
-        Thread.sleep(1000); //wait for 1 sec
-    }
-
-    private static long getMem() throws InterruptedException {
-        System.gc();
-        Thread.sleep(10);
-        Runtime runtime = Runtime.getRuntime();
-        return runtime.totalMemory() - runtime.freeMemory();
     }
 
     private static class MyClass {
