@@ -10,12 +10,30 @@ public class MyArrayList<T> implements List<T> {
 
     public MyArrayList() {
         elements = DEFAULT_CAPACITY_EMPTY_ARRAY;
-        this.size = 0;
     }
 
-    public MyArrayList(int size) {
-        elements = new Object[size];
-        this.size = size;
+    public MyArrayList(int capacity) {
+        if (capacity > 0) {
+            this.elements = new Object[capacity];
+        } else {
+            if (capacity != 0) {
+                throw new IllegalArgumentException("Illegal Capacity: " + capacity);
+            }
+
+            this.elements = DEFAULT_CAPACITY_EMPTY_ARRAY;
+        }
+    }
+
+    public MyArrayList(Collection<? extends T> var1) {
+        this.elements = var1.toArray();
+        if ((this.size = this.elements.length) != 0) {
+            if (this.elements.getClass() != Object[].class) {
+                this.elements = Arrays.copyOf(this.elements, this.size, Object[].class);
+            }
+        } else {
+            this.elements = DEFAULT_CAPACITY_EMPTY_ARRAY;
+        }
+
     }
 
     public int size() {
@@ -43,7 +61,17 @@ public class MyArrayList<T> implements List<T> {
     }
 
     public boolean add(T t) {
-        this.elements = Arrays.copyOf(this.elements, this.size + 1);
+        int var1 = size + 1;
+        if (this.elements == DEFAULT_CAPACITY_EMPTY_ARRAY) {
+            var1 = Math.max(10, var1);
+        }
+
+        if (var1 - this.elements.length > 0) {
+            if (var1 > 10) {
+                var1 *= 2;
+            }
+            this.elements = Arrays.copyOf(this.elements, var1);
+        }
         this.elements[this.size++] = t;
         return true;
     }
@@ -77,10 +105,12 @@ public class MyArrayList<T> implements List<T> {
     }
 
     public T get(int index) {
+        if (index < 0 || index >= size) throw new IndexOutOfBoundsException();
         return (T) this.elements[index];
     }
 
     public T set(int index, T element) {
+        if (index < 0 || index >= size) throw new IndexOutOfBoundsException();
         T var1 = (T) elements[index];
         this.elements[index] = element;
         return var1;

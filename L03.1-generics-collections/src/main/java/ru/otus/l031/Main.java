@@ -14,7 +14,7 @@ public class Main {
         Collections.addAll(firstList, 1, 4, 100, -48, 0);
         System.out.println(String.format("\nAfter addAll firstList length %s\nContains: %s", firstList.size(), firstList));
 
-        List <Integer> secondList = new MyArrayList(firstList.size());
+        List <Integer> secondList = new MyArrayList(firstList);
 
         Collections.copy(secondList, firstList);
         System.out.println(String.format("\nAfter copy secondList length %s\nContains: %s", secondList.size(), secondList));
